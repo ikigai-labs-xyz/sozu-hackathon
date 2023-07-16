@@ -1,4 +1,4 @@
-import Header from './components/Header.tsx';
+import Header from './components/Header';
 import MainBox from './components/MainBox.tsx';
 
 function MainPage() {

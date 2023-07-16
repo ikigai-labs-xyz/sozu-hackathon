@@ -1,3 +1,7 @@
+
+import Attacker from './Attacker';
+import Activity from './Activity';
+import Victim from './Victim';
 import Calc from './Calc';
 
 function Hack() {
@@ -10,7 +14,9 @@ function Hack() {
 </div>
 
 <Calc />
+<Attacker />
 
+<Activity />
 
 
 

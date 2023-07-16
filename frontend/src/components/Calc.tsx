@@ -126,3 +126,70 @@ function Calc() {
 }
 
 export default Calc;
+
+// import React, { useEffect, useState } from 'react';
+// import tokens from '../transactions/Values';
+
+// interface StyleSequence {
+//   number: number;
+//   delay: number;
+
+// }
+
+// function Calc() {
+//   const [sequenceIndex, setSequenceIndex] = useState<number>(0);
+
+//    const [MasterETH, setMasterETH] = useState<number>(tokens.ETH.amount);
+// //   const [MasterWBTC, setMasterWBTC] = useState<number>(tokens.wBTC.amount);
+// //   const [MasterHWBTC, setMasterHWBTC] = useState<number>(tokens.hwBTC.amount);
+
+
+//   const delay = 5000;
+
+
+//   const sequenceMasterETH: StyleSequence[] = [
+//     { number: 10, delay},
+//     { number: 20, delay},
+//     { number: 10, delay},
+//   ];
+
+// //   const sequenceMasterWBTC: StyleSequence[] = [
+// //     { number: 10, delay},
+// //     { number: 20, delay},
+// //     { number: 10, delay},
+// //   ];
+
+// //   const sequenceMasterHWBTC: StyleSequence[] = [
+// //     { number: 10, delay},
+// //     { number: 20, delay},
+// //     { number: 10, delay},
+// //   ];
+
+//   useEffect(() => {
+//     const timer = setTimeout(() => {
+//       setSequenceIndex((prevIndex) => prevIndex + 1);
+//     }, sequenceMasterETH[sequenceIndex].delay);
+
+//     if (sequenceIndex === e.length - 1) {
+//       clearTimeout(timer);
+//     }
+
+//     return () => clearTimeout(timer);
+//   }, [sequenceIndex]);
+
+//   useEffect(() => {
+//     if (sequenceIndex >= sequenceMasterETH.length) {
+//       return; // Stop updating the amount after one full sequence
+//     }
+
+//     setMasterETH((prevAmount) => prevAmount + sequenceMasterETH[sequenceIndex].number);
+//   }, [sequenceIndex]);
+
+//   return (
+// <>
+//       {MasterETH}
+//       </>
+//   );
+// }
+
+// export default Calc;
