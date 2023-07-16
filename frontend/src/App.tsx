@@ -1,7 +1,9 @@
 import './App.css';
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
-import MainPage from './Mainpage';
+import './styles/Animations.css'
+import MainPage from './MainPage';
+import HackPage from './HackPage';
 function App() {
 
 
@@ -13,6 +15,7 @@ function App() {
     },
     {
       path: "/hack",
+      element: <HackPage/>,
     },
   ]);
 
