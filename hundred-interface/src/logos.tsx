@@ -79,6 +79,7 @@ import vGNOlogo from "./assets/images/vGNO-logo.png"
 import agEURlogo from "./assets/images/agEUR-logo.svg"
 import OPlogo from "./assets/images/OPT-logo.svg"
 import Polygonlogo from "./assets/images/POLYGON-logo.svg"
+import MNTlogo from "./assets/images/MNTlogo.png"
 
 const Logos: { [key: string]: string } = {
     "ETH"       : ETHlogo,
@@ -179,7 +180,8 @@ const Logos: { [key: string]: string } = {
     "ioDAI"     : DAIlogo,
     "vGNO"      : vGNOlogo,
     "agEUR"     : agEURlogo,
-    "OP"        : OPlogo
+    "OP"        : OPlogo,
+    "MNT"       : MNTlogo,
 }
 
 export default Logos

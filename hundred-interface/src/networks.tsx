@@ -81,7 +81,32 @@ type NetworkData = {
 
 const NETWORKS: NetworkData = !process.env?.REACT_APP_TEST_NETWORK 
                               || process.env?.REACT_APP_TEST_NETWORK === "false" ? {
-    1: {
+
+                                1: {
+                                    chainId: 5001,
+                                    network: "Mantle Testnet",
+                                    logo: Logos["MNT"],
+                                    blocksPerYear: 24 * 60 * 60 / 13.5 * 365,
+                                    networkParams: {
+                                        chainId: "0x5001",
+                                        chainName: "Mantle Testnet",
+                                        rpcUrls: ["https://rpc.testnet.mantle.xyz"],
+                                        nativeCurrency: {
+                                            name: "MNT",
+                                            decimals: 18,
+                                            symbol: "MNT"
+                                        },
+                                        blockExplorerUrls: ["https://explorer.testnet.mantle.xyz/"]
+                                    },
+                                    trade: "https://app.balancer.fi/#/trade",
+                                    addLiquidity: "https://app.balancer.fi/#/pool/0x56b2811bf75bb258d2234af4f43b479bb55c3b46000200000000000000000091",
+                                    nativeTokenMarketAddress: "0xfcd8570ad81e6c77b8d252bebeba62ed980bd64d",
+                                    unitrollerAddress: "0x0f390559f258eb8591c8e31cf0905e97cf36ace2",
+                                    hundredAddress: "0x10010078a54396f62c96df8532dc2b4847d47ed3",
+                                    compoundLensAddress: "0xd513d22422a3062Bd342Ae374b4b9c20E0a9a074",
+                                    maximillion: '0x97F3763F8C0bE87Cab0e99Ee4b7806acA772FeDA',
+                                },
+    2: {
         chainId: 1,
         network: "Ethereum",
         logo: Logos["ETH"],
@@ -464,7 +489,7 @@ const NETWORKS: NetworkData = !process.env?.REACT_APP_TEST_NETWORK
         hundredAddress: "0x10010078a54396F62c96dF8532dc2B4847d47ED3",
         compoundLensAddress: "0xd513d22422a3062Bd342Ae374b4b9c20E0a9a074",
         multicallAddress: "0x25bb701a0ce238faecaec56b437460a372d7f139"
-    }
+    },
 }
 
 export default NETWORKS

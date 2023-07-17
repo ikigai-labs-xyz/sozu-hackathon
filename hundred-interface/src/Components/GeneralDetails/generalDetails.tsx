@@ -15,7 +15,7 @@ const GeneralDetails: React.FC = () => {
             <div className="cube2"></div>
             <div className="content">
                 <GeneralDetailsItem>
-                     <GeneralDetailsItemTitle  title="MARKET OVERVIEW"/>
+                     <GeneralDetailsItemTitle  title="MARKET OVERVIEW"/> {/** here are the titles */}
                          <GeneralDetailsItemContent>
                              <GeneralDetailsItemContentItem label="Total Supply" 
                                  value={`$${generalData ? {...generalData}.allMarketsTotalSupplyBalance.toRound(2, true, true) : '0'}`}/>
