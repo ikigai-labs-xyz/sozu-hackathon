@@ -21,7 +21,6 @@ function AproSupply() {
         address: contractAddress as `0x${string}`,
         abi: erc20Abi,
         functionName: "approve",
-        args: [amount.toString()],
       })
       const { write } = useContractWrite(config)
 
