@@ -54,4 +54,4 @@ module.exports = async (hre) => {
   log("----------------------------------------------------");
 };
 
-module.exports.tags = ["all", "contract"];
+module.exports.tags = ["all", "TurtleShellFirewall"];

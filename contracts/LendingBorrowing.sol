@@ -13,6 +13,10 @@ contract LendingBorrowing {
 
     mapping(address => uint256) public balances;
 
+    constructor(address _usdcAddress) {
+        s_usdc = IERC20(_usdcAddress);
+    }
+
     function deposit(uint256 depositAmount) public {
         require(depositAmount > 0, "deposit: Amount must be greater than zero");
         require(
@@ -31,5 +35,23 @@ contract LendingBorrowing {
         );
 
         balances[msg.sender] += depositAmount;
+    }
+
+    function withdraw(uint256 withdrawAmount) public {
+        require(
+            withdrawAmount > 0,
+            "withdraw: Amount must be greater than zero"
+        );
+        require(
+            balances[msg.sender] >= withdrawAmount,
+            "withdraw: Insufficient balance"
+        );
+
+        uint256 formatedWithdrawAmount = withdrawAmount * 10 ** USDC_DECIMALS;
+        balances[msg.sender] -= withdrawAmount;
+        require(
+            s_usdc.transfer(msg.sender, formatedWithdrawAmount),
+            "withdraw: transfer failed"
+        );
     }
 }
