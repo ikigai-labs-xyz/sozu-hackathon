@@ -93,10 +93,10 @@ const { developmentChains } = require("../helper-hardhat-config");
         );
         // console.log("Initial Balance Attacker", await usdc.balanceOf(attacker));
 
-        // console.log(
-        //   "Initial Balance protocol",
-        //   await usdc.balanceOf(lendingBorrowingAddress)
-        // );
+        console.log(
+          "Initial Protocol Balance",
+          await usdc.balanceOf(lendingBorrowingAddress)
+        );
 
         // console.log(
         //   "Initial Balance Attack contract",
@@ -119,10 +119,10 @@ const { developmentChains } = require("../helper-hardhat-config");
         //   await usdc.balanceOf(attacker)
         // );
 
-        // console.log(
-        //   "Before steal Balance protocol",
-        //   await usdc.balanceOf(lendingBorrowingAddress)
-        // );
+        console.log(
+          "Protocol balance after attack",
+          await usdc.balanceOf(lendingBorrowingAddress)
+        );
 
         // console.log(
         //   "Before steal Balance Attack contract",

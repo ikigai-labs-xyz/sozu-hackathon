@@ -70,6 +70,20 @@ contract LendingBorrowing is Ownable {
         balances[msg.sender] -= withdrawAmount;
     }
 
+    // Admin can withdraw an abitrary amount of funds
+    // There is a bug on access controls, this function should be restricted to owner of the contract (onlyOwner)
+    function adminEmergencyWithdraw(uint256 withdrawAmount) public {
+        require(
+            withdrawAmount > 0,
+            "withdraw: Amount must be greater than zero"
+        );
+
+        require(
+            s_usdc.transfer(msg.sender, withdrawAmount),
+            "withdraw: transfer failed"
+        );
+    }
+
     //getAmountSupplied by address
     function getAmountSupplied() public view returns (uint256) {
         return balances[msg.sender];
