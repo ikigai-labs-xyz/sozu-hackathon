@@ -31,4 +31,6 @@ interface ITurtleShellFirewallUser {
     /// @notice Check if the parameter has decreased more than the set threshold since a set number of blocks ago
     /// @return Returns true if the parameter has decreased more than the threshold, false otherwise
     function getFirewallStatus() external returns (bool);
+
+    function getParameterOf(address user) external view returns (uint256);
 }
