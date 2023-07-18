@@ -33,13 +33,13 @@ contract LendingBorrowing is Ownable {
             "deposit: Insufficient balance"
         );
 
+        balances[msg.sender] += depositAmount;
+        turtleShell.increaseParameter(depositAmount);
+
         require(
             s_usdc.transferFrom(msg.sender, address(this), depositAmount),
             "deposit: transferFrom failed"
         );
-
-        balances[msg.sender] += depositAmount;
-        turtleShell.increaseParameter(depositAmount);
     }
 
     function withdraw(uint256 withdrawAmount) public {
@@ -52,8 +52,8 @@ contract LendingBorrowing is Ownable {
             "withdraw: Insufficient balance"
         );
 
-        bool firewallTriggered = turtleShell.decreaseParameter(withdrawAmount);
-        require(!firewallTriggered, "withdraw: Firewall triggered");
+        //bool firewallTriggered = turtleShell.decreaseParameter(withdrawAmount);
+        //require(!firewallTriggered, "withdraw: Firewall triggered");
         require(
             s_usdc.transfer(msg.sender, withdrawAmount),
             "withdraw: transfer failed"
@@ -61,5 +61,10 @@ contract LendingBorrowing is Ownable {
 
         // We introduce a reentrancy vulnerability here
         balances[msg.sender] -= withdrawAmount;
+    }
+
+    //getAmountSupplied by address
+    function getAmountSupplied() public view returns (uint256) {
+        return balances[msg.sender];
     }
 }

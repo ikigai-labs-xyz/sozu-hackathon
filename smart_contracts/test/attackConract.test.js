@@ -6,6 +6,7 @@ const { developmentChains } = require("../helper-hardhat-config");
   ? describe.skip
   : describe("AttackContract", () => {
       let attacker,
+        attackerSigner,
         attackContract,
         attackContractAddress,
         usdc,
@@ -35,41 +36,37 @@ const { developmentChains } = require("../helper-hardhat-config");
         lendingBorrowingAddress = await lendingBorrowing.getAddress();
         await lendingBorrowing.initialize();
 
+        attackerSigner = await ethers.getSigner(attacker);
         await usdc.mint(attacker, depositAmount);
         await usdc
-          .connect(attacker)
+          .connect(attackerSigner)
           .approve(lendingBorrowingAddress, ethers.MaxInt256);
 
-        attackContract = await ethers.deployContract(
-          "AttackContract",
-          [usdcTokenAddress, lendingBorrowingAddress],
-          { from: attacker }
-        );
+        attackContract = await ethers.deployContract("AttackContract", [
+          usdcTokenAddress,
+          lendingBorrowingAddress,
+        ]);
         attackContractAddress = await attackContract.getAddress();
       });
 
       it.only("exploits the reentrancy vulnerability", async () => {
         const initialBalance = await usdc.balanceOf(attacker);
 
-        await attackContract.connect(attacker).attack(depositAmount);
+        // Transfer some USDC from the attacker's wallet to the AttackContract
+        await usdc
+          .connect(attackerSigner)
+          .transfer(attackContractAddress, depositAmount);
+
+        await attackContract.connect(attackerSigner).attack(depositAmount);
+        await attackContract.connect(attackerSigner).steal();
 
         const finalBalance = await usdc.balanceOf(attacker);
+
+        console.log("finalBalance", finalBalance.toString());
+
         assert.isTrue(
-          finalBalance.gt(initialBalance),
+          finalBalance > initialBalance,
           "AttackContract did not manage to exploit the reentrancy vulnerability"
-        );
-      });
-
-      it("allows the attacker to steal funds", async () => {
-        await attackContract.connect(attacker).attack(depositAmount);
-
-        const initialBalance = await ethers.provider.getBalance(attacker);
-        await attackContract.connect(attacker).steal();
-        const finalBalance = await ethers.provider.getBalance(attacker);
-
-        assert.isTrue(
-          finalBalance.gt(initialBalance),
-          "The attacker was not able to steal the funds"
         );
       });
     });
