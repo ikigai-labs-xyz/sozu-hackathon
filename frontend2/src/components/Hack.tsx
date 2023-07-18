@@ -1,8 +1,5 @@
 
-import Attacker from './Attacker';
-import Activity from './Activity';
-import Victim from './Victim';
-import Calc from './Calc';
+import MainHack from './MainHack';
 
 function Hack() {
 
@@ -10,12 +7,11 @@ function Hack() {
 <div className='grid grid-cols-12 items-center justify-center text-center'>
 
 <div className="col-start-5 col-span-4 p-3 m-1 bg-black rounded-xl font-lg text-white mb-12">
-  Running: Hundred Finance
+  DEMO: Lending & Borrowing Mock App
 </div>
 
-<Attacker />
+<MainHack />
 
-<Activity />
 
 
 

@@ -4,7 +4,7 @@ import contract from '../assets/contract_icon.svg';
 
 import tokens from '../transactions/Values';
 
-import Calc from './Calc';
+import Calc from '../activity/Calc';
 
 function Attacker2() {
 
