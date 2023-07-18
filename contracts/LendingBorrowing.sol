@@ -23,14 +23,13 @@ contract LendingBorrowing {
             s_usdc.allowance(msg.sender, address(this)) >= depositAmount,
             "deposit: Insufficient allowance"
         );
-
-        uint256 formatedDepositAmount = depositAmount * 10 ** USDC_DECIMALS;
         require(
-            s_usdc.transferFrom(
-                msg.sender,
-                address(this),
-                formatedDepositAmount
-            ),
+            s_usdc.balanceOf(msg.sender) >= depositAmount,
+            "deposit: Insufficient balance"
+        );
+
+        require(
+            s_usdc.transferFrom(msg.sender, address(this), depositAmount),
             "deposit: transferFrom failed"
         );
 

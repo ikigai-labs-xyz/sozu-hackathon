@@ -1,8 +1,6 @@
 const { assert, expect } = require("chai");
 const { deployments, ethers, getNamedAccounts } = require("hardhat");
 const { developmentChains } = require("../helper-hardhat-config");
-const { mintUsdc } = require("../utils/mintUsdc");
-const { getUSDC } = require("../utils/tokens");
 
 !developmentChains.includes(network.name)
   ? describe.skip
@@ -11,28 +9,33 @@ const { getUSDC } = require("../utils/tokens");
       const depositAmount = ethers.parseUnits("50", 6);
 
       beforeEach(async () => {
-        await deployments.fixture(["all"]);
+        await deployments.fixture(["TurtleShellFirewall", "usdc"]);
+
         deployer = (await getNamedAccounts()).deployer;
-        user = (await getNamedAccounts()).user;
+        user = (await getNamedAccounts()).user1;
 
-        lendingBorrowing = await ethers.getContract(
+        usdc = await ethers.getContract("Usdc", deployer);
+        const usdcTokenAddress = await usdc.getAddress();
+
+        // lendingBorrowing = await ethers.getContract(
+        //   "LendingBorrowing",
+        //   deployer
+        // );
+        lendingBorrowing = await ethers.deployContract(
           "LendingBorrowing",
-          deployer
+          [usdcTokenAddress],
+          {}
         );
-
         lendingBorrowingAddress = await lendingBorrowing.getAddress();
 
-        usdc = await getUSDC(deployer);
-
         const amount = ethers.parseUnits("1000", 6);
-        const actual_amount_minted = await mintUsdc(deployer, amount);
+        await usdc.mint(deployer, amount);
 
         await usdc.approve(lendingBorrowingAddress, ethers.MaxInt256);
       });
 
       describe("deposit", () => {
         it("sets deposited amount", async () => {
-          console.log("foo5");
           await lendingBorrowing.deposit(depositAmount);
 
           const balanceDeployer = await lendingBorrowing.balances(deployer);
@@ -55,7 +58,7 @@ const { getUSDC } = require("../utils/tokens");
           const finalDeployerBalance = await usdc.balanceOf(deployer);
           assert.equal(
             finalDeployerBalance.toString(),
-            startDeployerBalance.sub(depositAmount).toString()
+            (startDeployerBalance - depositAmount).toString()
           );
 
           const finalLendingBorrowingBalance = await usdc.balanceOf(
@@ -63,7 +66,7 @@ const { getUSDC } = require("../utils/tokens");
           );
           assert.equal(
             finalLendingBorrowingBalance.toString(),
-            startLendingBorrowingBalance.add(depositAmount).toString()
+            (startLendingBorrowingBalance + depositAmount).toString()
           );
         });
       });
