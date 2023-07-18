@@ -1,19 +1,32 @@
 import { useBalance } from 'wagmi'
+import { useNetwork } from 'wagmi'
+import { contractAddresses} from "../..//constants/index.ts";
 
 function TVL() {
+
+  const { chain }  = useNetwork()
+    let contractAddress = ""
+    let usdc = ""
+
+    if (chain && contractAddresses) {
+        const chainId =   chain.id;
+        contractAddress = contractAddresses[chainId]["lendingBorrowing"]
+        usdc = contractAddresses[chainId]["usdc"]
+      }
+
   const { data, isError, isLoading } = useBalance({
-    address: '0xA0Cf798816D4b9b9866b5330EEa46a18382f251e',
-    chainId: 1,
-    token: '0x1f9840a85d5af5bf1d1762f925bdaddc4201f984',
+    address: contractAddress as `0x${string}`,
+    chainId: chain,
+    token: usdc as `0x${string}`,
   })
 
   if (isLoading) return <div>Fetching balance…</div>
   if (isError) return <div>Error fetching balance</div>
   return (
     <>
-      {data?.formatted} {data?.symbol}
+    {data?.formatted}
     </>
   )
 }
 
-export default TVL
+export default TVL;
