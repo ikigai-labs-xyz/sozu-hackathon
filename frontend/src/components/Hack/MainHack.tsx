@@ -1,5 +1,6 @@
 import Overview from './Overview';
 import Assets from './Assets';
+import { WalletBtn } from '../WalletBtn';
 
 function MainHack() {
 

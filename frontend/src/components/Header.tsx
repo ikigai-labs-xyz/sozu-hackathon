@@ -1,4 +1,5 @@
 import logo from '../assets/logo.svg';
+import { WalletBtn } from './WalletBtn';
 
 function Header() {
 
@@ -27,6 +28,10 @@ function Header() {
 
         <div className="col-start-9 col-span-4 p-2 m-5 bg-black rounded-xl text-base font-bold text-white">
           DEMO: Lending & Borrowing Mock App
+        </div>
+
+        <div className="col-start-9 col-span-4 p-2 m-5 bg-black rounded-xl text-base font-bold text-white">
+          <WalletBtn />
         </div>
 
 
