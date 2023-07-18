@@ -26,7 +26,10 @@ module.exports = async (hre) => {
   const chainId = network.config.chainId;
   const usdcTokenAddress = networkConfig[chainId].usdcToken;
 
-  const arguments = [usdcTokenAddress];
+  const turtleshell = await ethers.getContract("TurtleShellFirewall", deployer);
+  const turtleshellAddress = await turtleshell.getAddress();
+
+  const arguments = [usdcTokenAddress, turtleshellAddress];
   await deploy("LendingBorrowing", {
     from: deployer,
     args: arguments,
@@ -40,8 +43,15 @@ module.exports = async (hre) => {
   log("---------------------------------");
   log(`deployed with owner : ${deployer}`);
 
-  const contract = await ethers.getContract("LendingBorrowing", deployer);
-  const contractAddress = await contract.getAddress();
+  const lendingBorrowing = await ethers.getContract(
+    "LendingBorrowing",
+    deployer
+  );
+  await lendingBorrowing.initialize();
+  log("---------------------------------");
+  log(`lendingBorrowing initialized Turtlteshell parameters`);
+
+  const contractAddress = await lendingBorrowing.getAddress();
 
   /***********************************
    *

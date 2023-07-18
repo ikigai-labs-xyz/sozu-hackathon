@@ -9,11 +9,15 @@ pragma solidity ^0.8.18;
  */
 interface ITurtleShellFirewallUser {
     /// @notice Set security parameters for the calling protocol
-    /// @param treshold The threshold as a percentage (represented as an integer)
-    /// @param numberOfBlocks The number of blocks to use for checking the threshold
-    function setSecurityParameter(
-        uint256 treshold,
-        uint8 numberOfBlocks
+    /// @param thresholdPercentage The threshold as a percentage (represented as an integer)
+    /// @param blockInterval The number of blocks to use for checking the threshold
+    /// @param startParameter The starting parameter for the calling protocol
+    /// @param cooldownPeriod The number of blocks to wait before the parameter can be decreased again
+    function setUserConfig(
+        uint8 thresholdPercentage,
+        uint256 blockInterval,
+        uint256 startParameter,
+        uint256 cooldownPeriod
     ) external;
 
     /// @notice Decrease the parameter for the calling protocol by a given amount

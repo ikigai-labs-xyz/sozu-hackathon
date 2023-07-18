@@ -13,8 +13,13 @@ contract LendingBorrowing {
 
     mapping(address => uint256) public balances;
 
-    constructor(address _usdcAddress) {
+    constructor(address _usdcAddress, address _turtleShellAddress) {
         s_usdc = IERC20(_usdcAddress);
+        turtleShell = ITurtleShellFirewallUser(_turtleShellAddress);
+    }
+
+    function initialize() public {
+        turtleShell.setUserConfig(15, 10, 0, 8);
     }
 
     function deposit(uint256 depositAmount) public {
@@ -34,6 +39,7 @@ contract LendingBorrowing {
         );
 
         balances[msg.sender] += depositAmount;
+        turtleShell.increaseParameter(depositAmount);
     }
 
     function withdraw(uint256 withdrawAmount) public {
