@@ -33,7 +33,7 @@ function Header() {
           DEMO: Lending & Borrowing Mock App
         </div> */}
 
-        <div className="col-start-9 col-span-3 p-2 m-5">
+        <div className="col-start-8 col-span-5 p-2 m-5">
           <WalletBtn />
         </div>
 
