@@ -4,12 +4,12 @@ pragma solidity ^0.8.18;
 import "./sdk/interfaces/ITurtleShellFirewallUser.sol";
 
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
 
-contract LendingBorrowing {
+contract LendingBorrowing is Ownable {
     ITurtleShellFirewallUser public turtleShell;
 
     IERC20 private s_usdc;
-    uint public constant USDC_DECIMALS = 6;
 
     mapping(address => uint256) public balances;
 
@@ -18,7 +18,7 @@ contract LendingBorrowing {
         turtleShell = ITurtleShellFirewallUser(_turtleShellAddress);
     }
 
-    function initialize() public {
+    function initialize() public onlyOwner {
         turtleShell.setUserConfig(15, 10, 0, 8);
     }
 
@@ -52,12 +52,14 @@ contract LendingBorrowing {
             "withdraw: Insufficient balance"
         );
 
-        balances[msg.sender] -= withdrawAmount;
         bool firewallTriggered = turtleShell.decreaseParameter(withdrawAmount);
         require(!firewallTriggered, "withdraw: Firewall triggered");
         require(
             s_usdc.transfer(msg.sender, withdrawAmount),
             "withdraw: transfer failed"
         );
+
+        // We introduce a reentrancy vulnerability here
+        balances[msg.sender] -= withdrawAmount;
     }
 }
