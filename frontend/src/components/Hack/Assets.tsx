@@ -41,11 +41,15 @@ function Assets() {
     <div className="col-start-10 col-span-4">
     <div className='flex flex-row gap-3 justify-center items-center'>
         <a href='https://example.com'>
-            <div className='text-white font-bold bg-slate-500 px-3 py-1 rounded-full shadow-lg hover:bg-blue-500 hover:shadow-lg hover:shadow-lime-500'>Supply</div>
+            <div className='text-white font-bold bg-slate-500 px-3 py-1 rounded-full shadow-lg hover:bg-blue-500 hover:shadow-lg hover:shadow-lime-500'>
+                Supply
+            </div>
         </a>
 
         <a href='https://example.com'>
-            <div className='text-white font-bold bg-slate-500 px-3 py-1 rounded-full shadow-lg hover:bg-blue-500 hover:shadow-lg hover:shadow-lime-500'>Borrsow</div>
+            <div className='text-white font-bold bg-slate-500 px-3 py-1 rounded-full shadow-lg hover:bg-blue-500 hover:shadow-lg hover:shadow-lime-500'>
+                Borrow
+            </div>
         </a>
             
         </div>
