@@ -22,11 +22,11 @@ interface ITurtleShellFirewallUser {
 
     /// @notice Decrease the parameter for the calling protocol by a given amount
     /// @param amount The amount to decrease the parameter by
-    function decreaseParameter(uint256 amount) external;
+    function decreaseParameter(uint256 amount) external returns (bool);
 
     /// @notice Increase the parameter for the calling protocol by a given amount
     /// @param amount The amount to increase the parameter by
-    function increaseParameter(uint256 amount) external;
+    function increaseParameter(uint256 amount) external returns (bool);
 
     /// @notice Check if the parameter has decreased more than the set threshold since a set number of blocks ago
     /// @return Returns true if the parameter has decreased more than the threshold, false otherwise

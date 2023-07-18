@@ -53,7 +53,8 @@ contract LendingBorrowing {
         );
 
         balances[msg.sender] -= withdrawAmount;
-        turtleShell.decreaseParameter(withdrawAmount);
+        bool firewallTriggered = turtleShell.decreaseParameter(withdrawAmount);
+        require(!firewallTriggered, "withdraw: Firewall triggered");
         require(
             s_usdc.transfer(msg.sender, withdrawAmount),
             "withdraw: transfer failed"

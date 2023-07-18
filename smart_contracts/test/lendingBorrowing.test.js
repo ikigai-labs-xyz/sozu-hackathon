@@ -6,7 +6,7 @@ const { developmentChains } = require("../helper-hardhat-config");
   ? describe.skip
   : describe("LendingBorrowing", () => {
       let deployer, user, lendingBorrowing, lendingBorrowingAddress, usdc;
-      const depositAmount = ethers.parseUnits("50", 6);
+      const depositAmount = ethers.parseUnits("5000", 6);
       const withdrawAmount = ethers.parseUnits("30", 6);
 
       beforeEach(async () => {
@@ -31,7 +31,7 @@ const { developmentChains } = require("../helper-hardhat-config");
         lendingBorrowingAddress = await lendingBorrowing.getAddress();
         await lendingBorrowing.initialize();
 
-        const amount = ethers.parseUnits("1000", 6);
+        const amount = ethers.parseUnits("10000", 6);
         await usdc.mint(deployer, amount);
 
         await usdc.approve(lendingBorrowingAddress, ethers.MaxInt256);
@@ -79,38 +79,49 @@ const { developmentChains } = require("../helper-hardhat-config");
           await lendingBorrowing.deposit(depositAmount);
         });
 
-        it("sets withdrawn amount", async () => {
-          await lendingBorrowing.withdraw(withdrawAmount);
+        describe("Withdraw less than 15% of the total TVL", () => {
+          it("sets withdrawn amount", async () => {
+            await lendingBorrowing.withdraw(withdrawAmount);
 
-          const balanceDeployer = await lendingBorrowing.balances(deployer);
-          assert.equal(
-            balanceDeployer.toString(),
-            (depositAmount - withdrawAmount).toString()
-          );
+            const balanceDeployer = await lendingBorrowing.balances(deployer);
+            assert.equal(
+              balanceDeployer.toString(),
+              (depositAmount - withdrawAmount).toString()
+            );
+          });
+
+          it("transfers funds from contract to user", async () => {
+            const startLendingBorrowingBalance = await usdc.balanceOf(
+              lendingBorrowingAddress
+            );
+
+            const startDeployerBalance = await usdc.balanceOf(deployer);
+
+            await lendingBorrowing.withdraw(withdrawAmount);
+
+            const finalDeployerBalance = await usdc.balanceOf(deployer);
+            assert.equal(
+              finalDeployerBalance.toString(),
+              (startDeployerBalance + withdrawAmount).toString()
+            );
+
+            const finalLendingBorrowingBalance = await usdc.balanceOf(
+              lendingBorrowingAddress
+            );
+            assert.equal(
+              finalLendingBorrowingBalance.toString(),
+              (startLendingBorrowingBalance - withdrawAmount).toString()
+            );
+          });
         });
 
-        it("transfers funds from contract to user", async () => {
-          const startLendingBorrowingBalance = await usdc.balanceOf(
-            lendingBorrowingAddress
-          );
-
-          const startDeployerBalance = await usdc.balanceOf(deployer);
-
-          await lendingBorrowing.withdraw(withdrawAmount);
-
-          const finalDeployerBalance = await usdc.balanceOf(deployer);
-          assert.equal(
-            finalDeployerBalance.toString(),
-            (startDeployerBalance + withdrawAmount).toString()
-          );
-
-          const finalLendingBorrowingBalance = await usdc.balanceOf(
-            lendingBorrowingAddress
-          );
-          assert.equal(
-            finalLendingBorrowingBalance.toString(),
-            (startLendingBorrowingBalance - withdrawAmount).toString()
-          );
+        describe("Withdraw more than 15% of the total TVL", () => {
+          it.only("triggers firewall and reverts", async () => {
+            const largeWithdrawAmount = ethers.parseUnits("2000", 6);
+            await expect(
+              lendingBorrowing.withdraw(largeWithdrawAmount)
+            ).to.be.revertedWith("withdraw: Firewall triggered");
+          });
         });
       });
     });
