@@ -1,5 +1,5 @@
 import Header from './components/Header.tsx';
-import MainBox from './components/MainBox.tsx';
+import MainBox from './components/MainPage/MainBox.tsx';
 
 function MainPage() {
 

@@ -1,10 +1,6 @@
-import user from '../assets/user.svg';
-import ether from '../assets/ether_icon.svg';
 import contract from '../assets/contract_icon.svg';
 
 import tokens from '../transactions/Values';
-
-import Calc from '../activity/Calc';
 
 function Attacker2() {
 

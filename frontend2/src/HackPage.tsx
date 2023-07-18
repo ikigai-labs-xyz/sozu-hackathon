@@ -1,5 +1,5 @@
 import Header from './components/Header.tsx';
-import Hack from './components/Hack.tsx';
+import MainHack from './components/Hack/MainHack.tsx';
 
 function HackPage() {
 
@@ -7,7 +7,7 @@ function HackPage() {
 
 <>
 <Header/>
-<Hack/>
+<MainHack/>
 </>
 
   );

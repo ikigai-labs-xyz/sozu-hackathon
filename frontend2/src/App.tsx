@@ -22,7 +22,7 @@ function App() {
 
   return (
 
-    <div className='border selection:bg-blue-700/100 selection:text-orange-500/100'>
+    <div className='selection:bg-red-500/100 selection:text-slate-100/100'>
       <RouterProvider router={router} />
     </div>
 
