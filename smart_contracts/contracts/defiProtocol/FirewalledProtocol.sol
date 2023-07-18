@@ -72,4 +72,8 @@ contract FirewalledProtocol is IProtocol, Ownable {
     function getTVL() public view returns (uint256) {
         return turtleShell.getParameterOf(address(this));
     }
+
+    function getUserBalance(address user) external view override returns (uint256) {
+        return balances[user];
+    }
 }

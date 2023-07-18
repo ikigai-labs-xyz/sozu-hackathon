@@ -67,4 +67,8 @@ contract NonFirewalledProtocol is IProtocol, Ownable {
     function getTVL() public view returns (uint256) {
         return s_tvl;
     }
+
+    function getUserBalance(address user) external view override returns (uint256) {
+        return balances[user];
+    }
 }

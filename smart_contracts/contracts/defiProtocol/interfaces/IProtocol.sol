@@ -29,4 +29,11 @@ interface IProtocol {
      * @return uint256 TVL
      */
     function getTVL() external view returns (uint256);
+
+    /**
+     * @notice Function for getting the user's balance in the protocol
+     * @param user The user's address
+     * @return uint256 User's balance
+     */
+    function getUserBalance(address user) external view returns (uint256);
 }

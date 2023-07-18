@@ -34,18 +34,23 @@ module.exports = async hre => {
   await mintTx.wait()
   log(`Minted 10 million USDC to user1 (${user1})`)
 
+  // mint 5 million USDC to the deployer
+  const mintDeployerTx = await usdc.mint(deployer, depositAmount)
+  await mintDeployerTx.wait()
+  log(`Minted 5 million USDC to deployer (${deployer})`)
+
   // deposit 5million into the non firewalled protocol
   const firstApproveTx = await userUsdc.approve(nonFirewalledProtocolAddress, depositAmount.toString())
   await firstApproveTx.wait()
   await userNonFirewalledProtocol.deposit(depositAmount)
-  log(`Deposited 5 million USDC to non-protected protocol ${nonFirewalledProtocolAddress}`)
+  log(`Deposited 5 million USDC to non-protected protocol (${nonFirewalledProtocolAddress}) from user1`)
 
   // deposit 5million into the firewalled protocol
   const secondApproveTx = await userUsdc.approve(firewalledProtocolAddress, depositAmount)
   await secondApproveTx.wait()
   await userFirewalledProtocol.deposit(depositAmount)
 
-  log(`Deposited 5 million USDC to protected (firewalled) protocol ${firewalledProtocolAddress}`)
+  log(`Deposited 5 million USDC to protected (firewalled) protocol (${firewalledProtocolAddress}) from user1`)
 
   log("---------------------------------")
 }

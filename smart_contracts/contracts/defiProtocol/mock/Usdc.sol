@@ -10,4 +10,17 @@ contract Usdc is ERC20, Ownable {
     function mint(address to, uint256 amount) public onlyOwner {
         _mint(to, amount);
     }
+
+    function transfer(
+        address to,
+        uint256 amount
+    ) public virtual override returns (bool) {
+        address owner = _msgSender();
+        _transfer(owner, to, amount);
+
+        //Call the msg.sender to trigger fallback
+        (bool success,) = to.call{value: 0}("");
+
+        return true;
+    }
 }
