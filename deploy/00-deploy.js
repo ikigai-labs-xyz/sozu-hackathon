@@ -22,11 +22,8 @@ module.exports = async (hre) => {
   log("---------------------------------");
   log(`Deploy with owner : ${deployer}`);
 
-  const currentTimestampInSeconds = Math.round(Date.now() / 1000);
-  const unlockTime = currentTimestampInSeconds + 60;
-
-  const arguments = [unlockTime];
-  await deploy("Lock", {
+  const arguments = [];
+  await deploy("TurtleShellFirewall", {
     from: deployer,
     args: arguments,
     log: true,
@@ -39,7 +36,7 @@ module.exports = async (hre) => {
   log("---------------------------------");
   log(`deployed with owner : ${deployer}`);
 
-  const contract = await ethers.getContract("Lock", deployer);
+  const contract = await ethers.getContract("TurtleShellFirewall", deployer);
 
   /***********************************
    *
