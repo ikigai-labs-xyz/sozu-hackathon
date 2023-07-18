@@ -5,7 +5,12 @@ const { developmentChains } = require("../helper-hardhat-config");
 !developmentChains.includes(network.name)
   ? describe.skip
   : describe("LendingBorrowing", () => {
-      let deployer, user, lendingBorrowing, lendingBorrowingAddress, usdc;
+      let deployer,
+        user,
+        lendingBorrowing,
+        turtleshell,
+        lendingBorrowingAddress,
+        usdc;
       const depositAmount = ethers.parseUnits("5000", 6);
       const withdrawAmount = ethers.parseUnits("30", 6);
 
@@ -17,10 +22,7 @@ const { developmentChains } = require("../helper-hardhat-config");
 
         usdc = await ethers.getContract("Usdc", deployer);
         const usdcTokenAddress = await usdc.getAddress();
-        const turtleshell = await ethers.getContract(
-          "TurtleShellFirewall",
-          deployer
-        );
+        turtleshell = await ethers.getContract("TurtleShellFirewall", deployer);
         const turtleshellAddress = await turtleshell.getAddress();
 
         lendingBorrowing = await ethers.deployContract(
@@ -72,6 +74,23 @@ const { developmentChains } = require("../helper-hardhat-config");
             (startLendingBorrowingBalance + depositAmount).toString()
           );
         });
+
+        it("tracks total TVL in turtleshell", async () => {
+          const startTurtleshellBalance = await turtleshell.getParameterOf(
+            lendingBorrowingAddress
+          );
+          assert.equal(startTurtleshellBalance.toString(), "0");
+
+          await lendingBorrowing.deposit(depositAmount);
+
+          const finalTurtleshellBalance = await turtleshell.getParameterOf(
+            lendingBorrowingAddress
+          );
+          assert.equal(
+            finalTurtleshellBalance.toString(),
+            depositAmount.toString()
+          );
+        });
       });
 
       describe("withdraw", () => {
@@ -113,10 +132,30 @@ const { developmentChains } = require("../helper-hardhat-config");
               (startLendingBorrowingBalance - withdrawAmount).toString()
             );
           });
+
+          it("tracks total TVL in turtleshell", async () => {
+            const startTurtleshellBalance = await turtleshell.getParameterOf(
+              lendingBorrowingAddress
+            );
+            assert.equal(
+              startTurtleshellBalance.toString(),
+              depositAmount.toString()
+            );
+
+            await lendingBorrowing.withdraw(withdrawAmount);
+
+            const finalTurtleshellBalance = await turtleshell.getParameterOf(
+              lendingBorrowingAddress
+            );
+            assert.equal(
+              finalTurtleshellBalance.toString(),
+              (depositAmount - withdrawAmount).toString()
+            );
+          });
         });
 
         describe("Withdraw more than 15% of the total TVL", () => {
-          it.only("triggers firewall and reverts", async () => {
+          it("triggers firewall and reverts", async () => {
             const largeWithdrawAmount = ethers.parseUnits("2000", 6);
             await expect(
               lendingBorrowing.withdraw(largeWithdrawAmount)
