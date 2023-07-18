@@ -45,7 +45,7 @@ function Assets() {
         </a>
 
         <a href='https://example.com'>
-            <div className='text-white font-bold bg-slate-500 px-3 py-1 rounded-full shadow-lg hover:bg-blue-500 hover:shadow-lg hover:shadow-lime-500'>Borrow</div>
+            <div className='text-white font-bold bg-slate-500 px-3 py-1 rounded-full shadow-lg hover:bg-blue-500 hover:shadow-lg hover:shadow-lime-500'>Borrsow</div>
         </a>
             
         </div>
