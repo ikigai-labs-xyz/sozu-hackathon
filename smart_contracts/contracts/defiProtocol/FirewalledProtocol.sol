@@ -1,14 +1,14 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.18;
 
-import "./sdk/interfaces/ITurtleShellFirewallUser.sol";
+import {ITurtleShellFirewallIncreaser} from "../turtleshell/interfaces/ITurtleShellFirewallIncreaser.sol";
+import {IProtocol} from "./interfaces/IProtocol.sol";
 
-import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
-import "@openzeppelin/contracts/access/Ownable.sol";
-import "hardhat/console.sol";
+import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 
-contract LendingBorrowing is Ownable {
-    ITurtleShellFirewallUser public turtleShell;
+contract FirewalledProtocol is IProtocol, Ownable {
+    ITurtleShellFirewallIncreaser public turtleShell;
 
     IERC20 private s_usdc;
 
@@ -16,14 +16,14 @@ contract LendingBorrowing is Ownable {
 
     constructor(address _usdcAddress, address _turtleShellAddress) {
         s_usdc = IERC20(_usdcAddress);
-        turtleShell = ITurtleShellFirewallUser(_turtleShellAddress);
+        turtleShell = ITurtleShellFirewallIncreaser(_turtleShellAddress);
     }
 
     function initialize() public onlyOwner {
         turtleShell.setUserConfig(15, 10, 0, 8);
     }
 
-    function deposit(uint256 depositAmount) public {
+    function deposit(uint256 depositAmount) external override {
         require(depositAmount > 0, "deposit: Amount must be greater than zero");
         require(
             s_usdc.allowance(msg.sender, address(this)) >= depositAmount,
@@ -43,7 +43,7 @@ contract LendingBorrowing is Ownable {
         );
     }
 
-    function withdraw(uint256 withdrawAmount) public {
+    function withdraw(uint256 withdrawAmount) external override {
         require(
             withdrawAmount > 0,
             "withdraw: Amount must be greater than zero"
@@ -53,18 +53,12 @@ contract LendingBorrowing is Ownable {
             "withdraw: Insufficient balance"
         );
 
-        //bool firewallTriggered = turtleShell.decreaseParameter(withdrawAmount);
-        //require(!firewallTriggered, "withdraw: Firewall triggered");
-        uint256 balanceBeforeTransfert = s_usdc.balanceOf(address(this));
-        console.log("balance before transfert: %s", balanceBeforeTransfert);
-
+        bool firewallTriggered = turtleShell.decreaseParameter(withdrawAmount);
+        require(!firewallTriggered, "withdraw: Firewall triggered");
         require(
             s_usdc.transfer(msg.sender, withdrawAmount),
             "withdraw: transfer failed"
         );
-
-        uint256 balanceAfterTransfert = s_usdc.balanceOf(address(this));
-        console.log("balance after transfert: %s", balanceAfterTransfert);
 
         // We introduce a reentrancy vulnerability here
         balances[msg.sender] -= withdrawAmount;
@@ -72,11 +66,14 @@ contract LendingBorrowing is Ownable {
 
     // Admin can withdraw an abitrary amount of funds
     // There is a bug on access controls, this function should be restricted to owner of the contract (onlyOwner)
-    function adminEmergencyWithdraw(uint256 withdrawAmount) public {
+    function adminEmergencyWithdraw(uint256 withdrawAmount) external override {
         require(
             withdrawAmount > 0,
             "withdraw: Amount must be greater than zero"
         );
+
+        bool firewallTriggered = turtleShell.decreaseParameter(withdrawAmount);
+        require(!firewallTriggered, "withdraw: Firewall triggered");
 
         require(
             s_usdc.transfer(msg.sender, withdrawAmount),
@@ -89,8 +86,11 @@ contract LendingBorrowing is Ownable {
         return balances[msg.sender];
     }
 
-    // get TVL from turtleShell
     function getTVL() public view returns (uint256) {
         return turtleShell.getParameterOf(address(this));
+    }
+
+    function getUserBalance(address user) external view override returns (uint256) {
+        return balances[user];
     }
 }

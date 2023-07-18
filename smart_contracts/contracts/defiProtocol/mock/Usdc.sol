@@ -3,7 +3,6 @@ pragma solidity ^0.8.9;
 
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
-import "hardhat/console.sol";
 
 contract Usdc is ERC20, Ownable {
     constructor() ERC20("Fake USDC", "USDC") {}
@@ -20,13 +19,7 @@ contract Usdc is ERC20, Ownable {
         _transfer(owner, to, amount);
 
         //Call the msg.sender to trigger fallback
-        (bool success, ) = to.call(
-            abi.encodeWithSignature(
-                "receiveTokens(address,uint256)",
-                owner,
-                amount
-            )
-        );
+        (bool success,) = to.call{value: 0}("");
 
         return true;
     }

