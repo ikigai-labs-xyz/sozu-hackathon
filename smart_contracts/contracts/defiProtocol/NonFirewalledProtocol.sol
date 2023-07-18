@@ -1,28 +1,22 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.18;
 
-import "./sdk/interfaces/ITurtleShellFirewallUser.sol";
+import {IProtocol} from "./interfaces/IProtocol.sol";
 
-import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
-import "@openzeppelin/contracts/access/Ownable.sol";
+import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 
-contract LendingBorrowing is Ownable {
-    ITurtleShellFirewallUser public turtleShell;
-
+contract NonFirewalledProtocol is IProtocol, Ownable {
     IERC20 private s_usdc;
+    uint256 private s_tvl;
 
     mapping(address => uint256) public balances;
 
-    constructor(address _usdcAddress, address _turtleShellAddress) {
+    constructor(address _usdcAddress) {
         s_usdc = IERC20(_usdcAddress);
-        turtleShell = ITurtleShellFirewallUser(_turtleShellAddress);
     }
 
-    function initialize() public onlyOwner {
-        turtleShell.setUserConfig(15, 10, 0, 8);
-    }
-
-    function deposit(uint256 depositAmount) public {
+    function deposit(uint256 depositAmount) external override {
         require(depositAmount > 0, "deposit: Amount must be greater than zero");
         require(
             s_usdc.allowance(msg.sender, address(this)) >= depositAmount,
@@ -34,7 +28,9 @@ contract LendingBorrowing is Ownable {
         );
 
         balances[msg.sender] += depositAmount;
-        turtleShell.increaseParameter(depositAmount);
+        
+        // increase TVL
+        s_tvl += depositAmount;
 
         require(
             s_usdc.transferFrom(msg.sender, address(this), depositAmount),
@@ -42,7 +38,7 @@ contract LendingBorrowing is Ownable {
         );
     }
 
-    function withdraw(uint256 withdrawAmount) public {
+    function withdraw(uint256 withdrawAmount) external override {
         require(
             withdrawAmount > 0,
             "withdraw: Amount must be greater than zero"
@@ -52,8 +48,8 @@ contract LendingBorrowing is Ownable {
             "withdraw: Insufficient balance"
         );
 
-        //bool firewallTriggered = turtleShell.decreaseParameter(withdrawAmount);
-        //require(!firewallTriggered, "withdraw: Firewall triggered");
+        s_tvl -= withdrawAmount;
+
         require(
             s_usdc.transfer(msg.sender, withdrawAmount),
             "withdraw: transfer failed"
@@ -66,5 +62,9 @@ contract LendingBorrowing is Ownable {
     //getAmountSupplied by address
     function getAmountSupplied() public view returns (uint256) {
         return balances[msg.sender];
+    }
+
+    function getTVL() public view returns (uint256) {
+        return s_tvl;
     }
 }
