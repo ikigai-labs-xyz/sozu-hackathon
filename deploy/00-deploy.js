@@ -29,7 +29,7 @@ module.exports = async (hre) => {
     log: true,
     waitConfirmations: waitBlockConfirmations,
     /* adjust if ProviderError: transaction underpriced */
-    //gasPrice: ethers.utils.parseUnits("200", "gwei"),
+    //gasPrice: ethers.parseUnits("200", "gwei"),
     //gasLimit: 30000000,
   });
 
