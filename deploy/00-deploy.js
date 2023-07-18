@@ -37,6 +37,7 @@ module.exports = async (hre) => {
   log(`deployed with owner : ${deployer}`);
 
   const contract = await ethers.getContract("TurtleShellFirewall", deployer);
+  const contractAddress = await contract.getAddress();
 
   /***********************************
    *
@@ -47,8 +48,8 @@ module.exports = async (hre) => {
     !developmentChains.includes(network.name) &&
     process.env.ETHERSCAN_API_KEY
   ) {
-    log("Verifying...");
-    await verify(contract.address, arguments);
+    log(`Verifying ${contractAddress} ...`);
+    await verify(contractAddress, arguments);
   }
   log("----------------------------------------------------");
 };
