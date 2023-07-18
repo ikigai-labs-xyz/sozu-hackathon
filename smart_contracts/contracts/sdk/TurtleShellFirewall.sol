@@ -97,9 +97,10 @@ contract TurtleShellFirewall is ITurtleShellFirewall {
             m_firewallConfig.blockInterval;
         uint256 referenceParameter;
         uint32 nonce = s_firewallData[msg.sender].nonce;
+
         for (uint32 i = nonce; i > 0; i--) {
             if (
-                s_firewallData[msg.sender].parameters[i - 1].blockNumber <=
+                s_firewallData[msg.sender].parameters[i].blockNumber <=
                 targetBlockNumber
             ) {
                 // TODO: find a solution to avoid accessing storage at every iteration (possibly store the value as an array in memory)
@@ -115,6 +116,7 @@ contract TurtleShellFirewall is ITurtleShellFirewall {
 
         uint256 thresholdAmount = (referenceParameter *
             m_firewallConfig.thresholdPercentage) / 100;
+
         if (newParameter > referenceParameter) {
             return newParameter - referenceParameter >= thresholdAmount;
         } else {
