@@ -20,12 +20,13 @@ module.exports = async (hre) => {
 
 const updateAddresses = async () => {
   const lendingBorrowing = await ethers.getContract("LendingBorrowing");
+  const usdc = await ethers.getContract("Usdc");
   const adresses = JSON.parse(fs.readFileSync(frontendAddressesFile, "utf8"));
   const chainId = network.config.chainId;
 
   adresses[chainId] = {
     lendingBorrowing: await lendingBorrowing.getAddress(),
-    usdc: networkConfig[chainId].usdcToken,
+    usdc: await usdc.getAddress(),
   };
 
   fs.writeFileSync(frontendAddressesFile, JSON.stringify(adresses));
