@@ -52,10 +52,10 @@ contract LendingBorrowing {
             "withdraw: Insufficient balance"
         );
 
-        uint256 formatedWithdrawAmount = withdrawAmount * 10 ** USDC_DECIMALS;
         balances[msg.sender] -= withdrawAmount;
+        turtleShell.decreaseParameter(withdrawAmount);
         require(
-            s_usdc.transfer(msg.sender, formatedWithdrawAmount),
+            s_usdc.transfer(msg.sender, withdrawAmount),
             "withdraw: transfer failed"
         );
     }

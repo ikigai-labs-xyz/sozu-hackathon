@@ -7,6 +7,7 @@ const { developmentChains } = require("../helper-hardhat-config");
   : describe("LendingBorrowing", () => {
       let deployer, user, lendingBorrowing, lendingBorrowingAddress, usdc;
       const depositAmount = ethers.parseUnits("50", 6);
+      const withdrawAmount = ethers.parseUnits("30", 6);
 
       beforeEach(async () => {
         await deployments.fixture(["TurtleShellFirewall", "usdc"]);
@@ -16,17 +17,19 @@ const { developmentChains } = require("../helper-hardhat-config");
 
         usdc = await ethers.getContract("Usdc", deployer);
         const usdcTokenAddress = await usdc.getAddress();
+        const turtleshell = await ethers.getContract(
+          "TurtleShellFirewall",
+          deployer
+        );
+        const turtleshellAddress = await turtleshell.getAddress();
 
-        // lendingBorrowing = await ethers.getContract(
-        //   "LendingBorrowing",
-        //   deployer
-        // );
         lendingBorrowing = await ethers.deployContract(
           "LendingBorrowing",
-          [usdcTokenAddress],
+          [usdcTokenAddress, turtleshellAddress],
           {}
         );
         lendingBorrowingAddress = await lendingBorrowing.getAddress();
+        await lendingBorrowing.initialize();
 
         const amount = ethers.parseUnits("1000", 6);
         await usdc.mint(deployer, amount);
@@ -67,6 +70,46 @@ const { developmentChains } = require("../helper-hardhat-config");
           assert.equal(
             finalLendingBorrowingBalance.toString(),
             (startLendingBorrowingBalance + depositAmount).toString()
+          );
+        });
+      });
+
+      describe("withdraw", () => {
+        beforeEach(async () => {
+          await lendingBorrowing.deposit(depositAmount);
+        });
+
+        it("sets withdrawn amount", async () => {
+          await lendingBorrowing.withdraw(withdrawAmount);
+
+          const balanceDeployer = await lendingBorrowing.balances(deployer);
+          assert.equal(
+            balanceDeployer.toString(),
+            (depositAmount - withdrawAmount).toString()
+          );
+        });
+
+        it("transfers funds from contract to user", async () => {
+          const startLendingBorrowingBalance = await usdc.balanceOf(
+            lendingBorrowingAddress
+          );
+
+          const startDeployerBalance = await usdc.balanceOf(deployer);
+
+          await lendingBorrowing.withdraw(withdrawAmount);
+
+          const finalDeployerBalance = await usdc.balanceOf(deployer);
+          assert.equal(
+            finalDeployerBalance.toString(),
+            (startDeployerBalance + withdrawAmount).toString()
+          );
+
+          const finalLendingBorrowingBalance = await usdc.balanceOf(
+            lendingBorrowingAddress
+          );
+          assert.equal(
+            finalLendingBorrowingBalance.toString(),
+            (startLendingBorrowingBalance - withdrawAmount).toString()
           );
         });
       });
