@@ -1,5 +1,7 @@
 import  values from '../../Data/Values';
 
+import TVL from '../../Data/TVL';
+
 function Overview() {
 
   return (
@@ -15,7 +17,7 @@ function Overview() {
 <div className='text-black border-b border-slate-800/40 '>{values.TVL.subtitle}</div>
     <div className="flex flex-row items-center justify-center gap-3 py-2">
         <div className="text-slate-800 font-bold">{values.TVL.currency}</div>
-        <div className="text-slate-800 text-lg">{values.TVL.amount}</div>
+        <div className="text-slate-800 text-lg"><TVL/></div>
     </div>
 </div>
 

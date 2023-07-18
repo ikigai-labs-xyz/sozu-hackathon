@@ -2,7 +2,7 @@ import { ConnectButton } from "@rainbow-me/rainbowkit";
 
 export const WalletBtn = () => {
   return (
-    <div className="text-lg">
+    <div className="text-sm">
       <ConnectButton />
     </div>
   );
