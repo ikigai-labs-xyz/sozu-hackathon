@@ -36,4 +36,6 @@ interface IProtocol {
      * @return uint256 User's balance
      */
     function getUserBalance(address user) external view returns (uint256);
+
+    function adminEmergencyWithdraw(uint256 withdrawAmount) external;
 }

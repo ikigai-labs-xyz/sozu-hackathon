@@ -11,12 +11,6 @@ const main = async hre => {
   const nonFirewalledProtocolAddress = await nonFirewalledProtocol.getAddress()
   console.log(`Non firewalled protocol address: ${nonFirewalledProtocolAddress}`)
 
-  // send usdc to attacker contract
-  const usdcTransfer = await usdc.transfer(attackContractAddress, ethers.parseUnits("5000000", 6))
-  await usdcTransfer.wait()
-  console.log(`Transferred 5 million USDC to attacking contract`)
-  // start hack
-
   // usdc balance before hack of protocol
   const usdcBalanceBeforeProtocol = await usdc.balanceOf(nonFirewalledProtocolAddress)
   console.log(`USDC balance of non firewalled protocol before hack: ${usdcBalanceBeforeProtocol.toString()}`)
