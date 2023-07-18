@@ -23,8 +23,8 @@ module.exports = async (hre) => {
   log("---------------------------------");
   log(`Deploy with owner : ${deployer}`);
 
-  const chainId = network.config.chainId;
-  const usdcTokenAddress = networkConfig[chainId].usdcToken;
+  const usdc = await ethers.getContract("Usdc", deployer);
+  const usdcTokenAddress = await usdc.getAddress();
 
   const turtleshell = await ethers.getContract("TurtleShellFirewall", deployer);
   const turtleshellAddress = await turtleshell.getAddress();

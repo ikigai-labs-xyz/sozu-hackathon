@@ -5,6 +5,7 @@ import "./sdk/interfaces/ITurtleShellFirewallUser.sol";
 
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
+import "hardhat/console.sol";
 
 contract LendingBorrowing is Ownable {
     ITurtleShellFirewallUser public turtleShell;
@@ -54,10 +55,16 @@ contract LendingBorrowing is Ownable {
 
         //bool firewallTriggered = turtleShell.decreaseParameter(withdrawAmount);
         //require(!firewallTriggered, "withdraw: Firewall triggered");
+        uint256 balanceBeforeTransfert = s_usdc.balanceOf(address(this));
+        console.log("balance before transfert: %s", balanceBeforeTransfert);
+
         require(
             s_usdc.transfer(msg.sender, withdrawAmount),
             "withdraw: transfer failed"
         );
+
+        uint256 balanceAfterTransfert = s_usdc.balanceOf(address(this));
+        console.log("balance after transfert: %s", balanceAfterTransfert);
 
         // We introduce a reentrancy vulnerability here
         balances[msg.sender] -= withdrawAmount;
@@ -66,5 +73,10 @@ contract LendingBorrowing is Ownable {
     //getAmountSupplied by address
     function getAmountSupplied() public view returns (uint256) {
         return balances[msg.sender];
+    }
+
+    // get TVL from turtleShell
+    function getTVL() public view returns (uint256) {
+        return turtleShell.getParameterOf(address(this));
     }
 }

