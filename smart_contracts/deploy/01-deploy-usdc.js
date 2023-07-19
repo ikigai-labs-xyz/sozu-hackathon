@@ -1,19 +1,11 @@
-const { network, ethers } = require("hardhat");
-const {
-  developmentChains,
-  VERIFICATION_BLOCK_CONFIRMATIONS,
-} = require("../helper-hardhat-config");
+const { network, ethers } = require("hardhat")
+const { developmentChains, VERIFICATION_BLOCK_CONFIRMATIONS } = require("../helper-hardhat-config")
 
-module.exports = async (hre) => {
-  // Only Deploy USDC token locally
-  if (!developmentChains.includes(network.name)) {
-    return;
-  }
-
-  const { getNamedAccounts, deployments } = hre;
-  const { deploy, log } = deployments;
-  const { deployer } = await getNamedAccounts();
-  const waitBlockConfirmations = 1;
+module.exports = async hre => {
+  const { getNamedAccounts, deployments } = hre
+  const { deploy, log } = deployments
+  const { deployer } = await getNamedAccounts()
+  const waitBlockConfirmations = 1
 
   /***********************************
    *
@@ -21,16 +13,16 @@ module.exports = async (hre) => {
    *
    ************************************/
 
-  log("---------------------------------");
-  log(`Deploy Usdc with owner : ${deployer}`);
+  log("---------------------------------")
+  log(`Deploy Usdc with owner : ${deployer}`)
 
-  const arguments = [];
+  const arguments = []
   const usdc = await deploy("Usdc", {
     from: deployer,
     args: arguments,
     log: true,
     waitConfirmations: waitBlockConfirmations,
-  });
-};
+  })
+}
 
-module.exports.tags = ["all", "usdc"];
+module.exports.tags = ["all", "usdc"]

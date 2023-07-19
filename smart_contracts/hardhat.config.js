@@ -42,7 +42,7 @@ module.exports = {
       url: MANTLE_TESTNET_RPC_URL,
       accounts: [DEPLOYER_PRIVATE_KEY, USER_PRIVATE_KEY],
       saveDeployments: true,
-      chainId: 5,
+      chainId: 5001,
     },
   },
   etherscan: {
@@ -60,7 +60,7 @@ module.exports = {
   namedAccounts: {
     deployer: {
       default: 0,
-      5: 0,
+      5001: 0,
       31337: 0,
     },
     user1: {
