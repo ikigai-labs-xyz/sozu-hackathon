@@ -16,7 +16,7 @@ function TVL() {
 		usdc = contractAddresses["31337"]["usdc"]
 	}
 
-	const { data, isError, isLoading } = useBalance({
+	const { data, isError, isLoading, error } = useBalance({
 		address: contractAddress as `0x${string}`,
 		chainId: 31337,
 		token: usdc as `0x${string}`,
@@ -30,6 +30,8 @@ function TVL() {
 					currency: "USD",
 			  })
 			: "0"
+
+	console.log(error)
 
 	if (isLoading) return <div>Fetching balance…</div>
 	if (isError) return <div>Error fetching balance</div>
