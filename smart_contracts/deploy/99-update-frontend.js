@@ -55,8 +55,6 @@ const updateAbi = async () => {
   const abi = JSON.parse(fs.readFileSync(abiFile, "utf8"))
 
   fs.writeFileSync(frontendLendingBorrowingAbiFile, JSON.stringify(abi, null, 2))
-  let erc20Abi = fs.readFileSync("./utils/abis/erc20.json", "utf8")
-  fs.writeFileSync(frontendERC20AbiFile, erc20Abi)
 }
 
 module.exports.tags = ["all", "frontend"]
