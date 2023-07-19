@@ -18,6 +18,8 @@ const updateAddresses = async () => {
   const firewalledProtocol = await ethers.getContract("FirewalledProtocol")
   const nonFirewalledProtocol = await ethers.getContract("NonFirewalledProtocol")
   const turtleShellFirewall = await ethers.getContract("TurtleShellFirewall")
+  const usdc = await ethers.getContract("Usdc")
+
   const adresses = JSON.parse(fs.readFileSync(frontendAddressesFile, "utf8"))
   const chainId = network.config.chainId
 
@@ -25,7 +27,7 @@ const updateAddresses = async () => {
     firewalledProtocol: await firewalledProtocol.getAddress(),
     nonFirewalledProtocol: await nonFirewalledProtocol.getAddress(),
     turtleShellFirewall: await turtleShellFirewall.getAddress(),
-    usdc: networkConfig[chainId].usdcToken,
+    usdc: await usdc.getAddress(),
   }
 
   fs.writeFileSync(frontendAddressesFile, JSON.stringify(adresses))
