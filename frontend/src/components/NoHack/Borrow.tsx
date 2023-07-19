@@ -2,27 +2,27 @@ import { useContractWrite, usePrepareContractWrite } from "wagmi"
 import { contractAddresses, contractAbi } from "../../../constants/index"
 import { parseEther } from "viem"
 
-function Supply() {
+function Borrow() {
 	const protocolAddress = contractAddresses["31337"]["firewalledProtocol"]
 	const amount = parseEther("1000")
 
-	const { config: depositConfig, error: depositError } = usePrepareContractWrite({
+	const { config: withdrawConfig, error: withdrawError } = usePrepareContractWrite({
 		address: protocolAddress as `0x${string}`,
 		abi: contractAbi,
-		functionName: "deposit",
+		functionName: "withdraw",
 		args: [amount.toString()],
 	})
-	const { write: deposit } = useContractWrite(depositConfig)
+	const { write: withdraw } = useContractWrite(withdrawConfig)
 
-	depositError && console.log(depositError)
+	withdrawError && console.log(withdrawError)
 
 	return (
 		<>
-			<button disabled={!deposit} onClick={() => deposit?.()}>
-				Supply
+			<button disabled={!withdraw} onClick={() => withdraw?.()}>
+				Borrow
 			</button>
 		</>
 	)
 }
 
-export default Supply
+export default Borrow

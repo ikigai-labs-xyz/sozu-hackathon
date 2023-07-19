@@ -81,11 +81,6 @@ contract FirewalledProtocol is IProtocol, Ownable {
         );
     }
 
-    //getAmountSupplied by address
-    function getAmountSupplied() public view returns (uint256) {
-        return balances[msg.sender];
-    }
-
     function getTVL() public view returns (uint256) {
         return turtleShell.getParameterOf(address(this));
     }

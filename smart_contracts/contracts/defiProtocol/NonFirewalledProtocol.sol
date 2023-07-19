@@ -73,11 +73,6 @@ contract NonFirewalledProtocol is IProtocol, Ownable {
         );
     }
 
-    //getAmountSupplied by address
-    function getAmountSupplied() public view returns (uint256) {
-        return balances[msg.sender];
-    }
-
     function getTVL() public view returns (uint256) {
         return s_tvl;
     }

@@ -1,7 +1,7 @@
 import { useBalance } from "wagmi"
 import { useNetwork } from "wagmi"
 import { contractAddresses } from "../../../constants/index"
-import { formatUnits } from "viem"
+import { formatEther } from "viem"
 
 function TVL() {
 	const { chain } = useNetwork()
@@ -11,7 +11,7 @@ function TVL() {
 	if (chain && contractAddresses) {
 		const chainId = chain.id
 		// eslint-disable-next-line
-		contractAddress = contractAddresses["31337"]["nonFirewalledProtocol"]
+		contractAddress = contractAddresses["31337"]["firewalledProtocol"]
 		// eslint-disable-next-line
 		usdc = contractAddresses["31337"]["usdc"]
 	}
@@ -23,9 +23,17 @@ function TVL() {
 		watch: true,
 	})
 
+	const formattedData =
+		data && data.value
+			? Number(formatEther(data.value.toBigInt())).toLocaleString("en-US", {
+					style: "currency",
+					currency: "USD",
+			  })
+			: "0"
+
 	if (isLoading) return <div>Fetching balance…</div>
 	if (isError) return <div>Error fetching balance</div>
-	return <>{data?.formatted}</>
+	return <>{formattedData}</>
 }
 
 export default TVL
