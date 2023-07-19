@@ -25,6 +25,7 @@ function Trigger() {
         abi: contractAbi,
         eventName: "FirewallStatusUpdate",
         listener(log) {
+            setIsOpen(true);
             console.log(log)
           },  
       })
