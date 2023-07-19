@@ -17,12 +17,14 @@ module.exports = async hre => {
 const updateAddresses = async () => {
   const firewalledProtocol = await ethers.getContract("FirewalledProtocol")
   const nonFirewalledProtocol = await ethers.getContract("NonFirewalledProtocol")
+  const turtleShellFirewall = await ethers.getContract("TurtleShellFirewall")
   const adresses = JSON.parse(fs.readFileSync(frontendAddressesFile, "utf8"))
   const chainId = network.config.chainId
 
   adresses[chainId] = {
     firewalledProtocol: await firewalledProtocol.getAddress(),
     nonFirewalledProtocol: await nonFirewalledProtocol.getAddress(),
+    turtleShellFirewall: await turtleShellFirewall.getAddress(),
     usdc: networkConfig[chainId].usdcToken,
   }
 
