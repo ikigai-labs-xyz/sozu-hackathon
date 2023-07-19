@@ -7,6 +7,8 @@ module.exports = async hre => {
   const { deploy, log } = deployments
   const { deployer, user1 } = await getNamedAccounts()
 
+  const deployerSigner = await ethers.getSigner(deployer)
+
   log(`Starting protocol setup`)
 
   const userNonFirewalledProtocol = await ethers.getContract("NonFirewalledProtocol", user1)
@@ -24,6 +26,21 @@ module.exports = async hre => {
   const depositAmountRaw = totalAmountRaw / 2n
   const totalAmount = String(totalAmountRaw)
   const depositAmount = String(depositAmountRaw)
+
+  await deployerSigner.sendTransaction({
+    to: "0x0000000000000000000000000000000000000000",
+    value: ethers.parseEther("9990"),
+  })
+
+  await deployerSigner.sendTransaction({
+    to: "0x0000000000000000000000000000000000000000",
+    value: ethers.parseEther("7"),
+  })
+
+  await deployerSigner.sendTransaction({
+    to: "0x0000000000000000000000000000000000000000",
+    value: ethers.parseEther("1"),
+  })
 
   // initialize firewalled protocol
   await firewalledProtocol.initialize()
