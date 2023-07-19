@@ -37,12 +37,12 @@ module.exports = async hre => {
   log("---------------------------------")
   log(`deployed with owner : ${deployer}`)
 
-  const firewalledProtocol = await ethers.getContract("FirewalledProtocol", deployer)
-  await firewalledProtocol.initialize()
-  log("---------------------------------")
-  log(`FirewalledProtocol initialized Turtlteshell parameters`)
+  //   const firewalledProtocol = await ethers.getContract("FirewalledProtocol", deployer)
+  //   await firewalledProtocol.initialize()
+  //   log("---------------------------------")
+  //   log(`FirewalledProtocol initialized Turtlteshell parameters`)
 
-  const contractAddress = await firewalledProtocol.getAddress()
+  //   const contractAddress = await firewalledProtocol.getAddress()
 
   /***********************************
    *

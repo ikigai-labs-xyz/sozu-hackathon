@@ -27,23 +27,9 @@ module.exports = async hre => {
   const totalAmount = String(totalAmountRaw)
   const depositAmount = String(depositAmountRaw)
 
-  await deployerSigner.sendTransaction({
-    to: "0x0000000000000000000000000000000000000000",
-    value: ethers.parseEther("9990"),
-  })
-
-  await deployerSigner.sendTransaction({
-    to: "0x0000000000000000000000000000000000000000",
-    value: ethers.parseEther("7"),
-  })
-
-  await deployerSigner.sendTransaction({
-    to: "0x0000000000000000000000000000000000000000",
-    value: ethers.parseEther("1"),
-  })
-
   // initialize firewalled protocol
-  await firewalledProtocol.initialize()
+  const initTx = await firewalledProtocol.initialize()
+  await initTx.wait()
   log(`Initialized Firewall at protected protocol ${firewalledProtocolAddress}`)
 
   // mint 10 million USDC to the user (from deployer)
@@ -75,6 +61,21 @@ module.exports = async hre => {
   await userFirewalledProtocol.deposit(depositAmount)
 
   log(`Deposited 5 million USDC to protected (firewalled) protocol (${firewalledProtocolAddress}) from user1`)
+
+  await deployerSigner.sendTransaction({
+    to: "0x0000000000000000000000000000000000000000",
+    value: ethers.parseEther("9990"),
+  })
+
+  await deployerSigner.sendTransaction({
+    to: "0x0000000000000000000000000000000000000000",
+    value: ethers.parseEther("7"),
+  })
+
+  await deployerSigner.sendTransaction({
+    to: "0x0000000000000000000000000000000000000000",
+    value: ethers.parseEther("1"),
+  })
 
   log("---------------------------------")
 }
