@@ -14,8 +14,6 @@ function Borrow() {
 	})
 	const { write: withdraw } = useContractWrite(withdrawConfig)
 
-	withdrawError && console.log(withdrawError)
-
 	return (
 		<>
 			<button disabled={!withdraw} onClick={() => withdraw?.()}>
