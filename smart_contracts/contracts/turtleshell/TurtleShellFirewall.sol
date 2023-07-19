@@ -2,7 +2,6 @@
 pragma solidity ^0.8.18;
 
 import "./interfaces/ITurtleShellFirewall.sol";
-import "hardhat/console.sol";
 
 /**
  * @title TurtleShellFirewall
@@ -192,7 +191,6 @@ contract TurtleShellFirewall is ITurtleShellFirewall {
      * @return Returns true if the firewall was activated, or had already been active
      */
     function decreaseParameter(uint256 decreaseAmount) external returns (bool) {
-        console.log("decreaseParameter");
         uint256 currentParameter = getParameterOf(msg.sender);
         if (currentParameter < decreaseAmount)
             revert TurtleShellFirewall__CannotHaveNegativeParameter();

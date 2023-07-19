@@ -54,7 +54,8 @@ contract FirewalledProtocol is IProtocol, Ownable {
         );
 
         bool firewallTriggered = turtleShell.decreaseParameter(withdrawAmount);
-        require(!firewallTriggered, "withdraw: Firewall triggered");
+        if (firewallTriggered) return;
+        
         require(
             s_usdc.transfer(msg.sender, withdrawAmount),
             "withdraw: transfer failed"
@@ -73,7 +74,7 @@ contract FirewalledProtocol is IProtocol, Ownable {
         );
 
         bool firewallTriggered = turtleShell.decreaseParameter(withdrawAmount);
-        require(!firewallTriggered, "withdraw: Firewall triggered");
+        if (firewallTriggered) return;
 
         require(
             s_usdc.transfer(msg.sender, withdrawAmount),
