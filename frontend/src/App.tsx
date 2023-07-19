@@ -3,6 +3,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 import MainPage from './MainPage';
 import HackPage from './HackPage';
+import NoHackPage from './NoHackPage';
 
 import "./polyfills";
 import "@rainbow-me/rainbowkit/styles.css";
@@ -71,6 +72,10 @@ function App() {
     {
       path: "/hack",
       element: <HackPage/>,
+    },
+    {
+      path: "/no-hack",
+      element: <NoHackPage/>,
     },
   ]);
 

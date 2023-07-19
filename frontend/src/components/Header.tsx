@@ -1,5 +1,6 @@
 import logo from '../assets/logo.svg';
 import { WalletBtn } from './WalletBtn';
+import Button  from './Button';
 
 function Header() {
 
@@ -27,6 +28,7 @@ function Header() {
         <a href="https://turtleshell.gitbook.io/introduction/" target="_blank" rel="noopener noreferrer">
             <div className="">Docs</div>
             </a>
+            <Button />
         </div>
 {/* 
         <div className="col-start-7 col-span-3 p-1 m-1 bg-black rounded-xl text-sm font-bold text-white">

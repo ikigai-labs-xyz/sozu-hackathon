@@ -1,6 +1,6 @@
 import { useContractWrite, usePrepareContractWrite,} from 'wagmi'
 import { useNetwork } from 'wagmi'
-import { contractAddresses, contractAbi } from "../../..//constants/index";
+import { contractAddresses, contractAbi } from "../../../constants/index";
 import { parseEther } from 'viem'
 
 
@@ -12,7 +12,7 @@ function TVL() {
 
     if (chain && contractAddresses) {
         const chainId = String(chain.id);
-        contractAddress = contractAddresses["31337"]["nonFirewalledProtocol"]
+        contractAddress = contractAddresses["31337"]["firewalledProtocol"]
       }
 
       const amount = parseEther('100000')
