@@ -1,27 +1,26 @@
 import { useContractWrite, usePrepareContractWrite,} from 'wagmi'
 import { useNetwork } from 'wagmi'
-import { contractAddresses, contractAbi } from "../../..//constants/index";
+import { contractAddresses, erc20Abi } from "../../../constants/index";
 import { parseEther } from 'viem'
 
 
 
-function TVL() {
+function AproSupply() {
 
     const { chain }  = useNetwork()
     let contractAddress = ""
 
     if (chain && contractAddresses) {
         const chainId = String(chain.id);
-        contractAddress = contractAddresses["31337"]["nonFirewalledProtocol"]
+        contractAddress = contractAddresses["31337"]["usdc"]
       }
 
       const amount = parseEther('100000')
     
       const { config, error } = usePrepareContractWrite({
         address: contractAddress as `0x${string}`,
-        abi: contractAbi,
-        functionName: "deposit",
-        args: [amount.toString()],
+        abi: erc20Abi,
+        functionName: "approve",
       })
       const { write } = useContractWrite(config)
 
@@ -29,7 +28,7 @@ function TVL() {
   return (
     <>
       <button disabled={!write} onClick={() => write?.()}>
-        Send Transaction
+        Approve Transaction
       </button>
       {error && (
         <div>An error occurred preparing the transaction: {error.message}</div>
@@ -38,4 +37,4 @@ function TVL() {
   )
 }
 
-export default TVL;
+export default AproSupply;

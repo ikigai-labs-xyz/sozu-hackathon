@@ -1,6 +1,6 @@
 import { useBalance } from 'wagmi'
 import { useNetwork } from 'wagmi'
-import { contractAddresses} from "../..//constants/index.ts";
+import { contractAddresses} from "../../constants/index.ts";
 
 function TVL() {
 
