@@ -19,9 +19,9 @@ import { publicProvider } from "wagmi/providers/public";
 function App() {
 
   const mantleTestnet: Chain = {
-    id: 5001,
+    id: 31337,
     name: 'Mantle Testnet',
-    network: 'mantleTestnet',
+    network: 'hardhat',
     iconUrl: 'https://s2.coinmarketcap.com/static/img/coins/64x64/27075.png',
     iconBackground: '#000000',
     nativeCurrency: {
@@ -31,7 +31,7 @@ function App() {
     },
     rpcUrls: {
       default: {
-        http: ['https://rpc.ankr.com/mantle_testnet'],
+        http: ['localhost:8545'],
       },
       public: {
         http: [],
