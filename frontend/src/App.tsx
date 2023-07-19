@@ -64,11 +64,11 @@ function App() {
 		},
 		{
 			path: "/hack",
-			element: <NoHackPage />,
+			element: <HackPage />,
 		},
 		{
 			path: "/no-hack",
-			element: <HackPage />,
+			element: <NoHackPage />,
 		},
 	])
 

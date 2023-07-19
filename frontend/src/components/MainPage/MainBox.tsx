@@ -17,13 +17,13 @@ function MainBox() {
 
       <div className='p-5 col-start-3 col-span-4 gap-5 justify-center items-center '>
 
-      <a href="/no-hack" target="_blank" rel="noopener noreferrer">
+      <a href="/hack" target="_blank" rel="noopener noreferrer">
         <div className="p-3 m-1 bg-black rounded-xl font-lg text-white hover:bg-slate-500">
           Original Hack
         </div>
       </a>
 
-      <a href="/hack">
+      <a href="/no-hack">
         <div className="p-3 m-1 bg-black rounded-xl font-lg text-white hover:bg-slate-500">
           Firewall-guarded Hack
         </div>
