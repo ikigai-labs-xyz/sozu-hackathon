@@ -1,8 +1,8 @@
 import values from "../../Data/Values"
 
 import usdc from "../../assets/usdc.svg"
-import AproSupply from "./AproSupply"
 import Supply from "./Supply"
+import Borrow from "./Borrow"
 
 function Assets() {
 	return (
@@ -41,10 +41,9 @@ function Assets() {
 											<Supply />
 										</div>
 									</a>
-									<AproSupply />
 									<a href="https://example.com">
 										<div className="text-white font-bold bg-slate-500 px-3 py-1 rounded-full shadow-lg hover:bg-blue-500 hover:shadow-lg hover:shadow-lime-500">
-											Borrow
+											<Borrow />
 										</div>
 									</a>
 								</div>
