@@ -1,41 +1,39 @@
-import { useContractWrite, usePrepareContractWrite,} from 'wagmi'
-import { useNetwork } from 'wagmi'
-import { contractAddresses, contractAbi } from "../../../constants/index";
-import { parseEther } from 'viem'
-
-
+import { useBalance } from "wagmi"
+import { useNetwork } from "wagmi"
+import { contractAddresses } from "../../../constants/index"
+import { formatEther } from "viem"
 
 function TVL() {
+	const { chain } = useNetwork()
+	let contractAddress = ""
+	let usdc = ""
 
-    const { chain }  = useNetwork()
-    let contractAddress = ""
+	if (chain && contractAddresses) {
+		const chainId = chain.id
+		// eslint-disable-next-line
+		contractAddress = contractAddresses["31337"]["firewalledProtocol"]
+		// eslint-disable-next-line
+		usdc = contractAddresses["31337"]["usdc"]
+	}
 
-    if (chain && contractAddresses) {
-        const chainId = String(chain.id);
-        contractAddress = contractAddresses["31337"]["firewalledProtocol"]
-      }
+	const { data, isError, isLoading } = useBalance({
+		address: contractAddress as `0x${string}`,
+		chainId: 31337,
+		token: usdc as `0x${string}`,
+		watch: true,
+	})
 
-      const amount = parseEther('100000')
-    
-      const { config, error } = usePrepareContractWrite({
-        address: contractAddress as `0x${string}`,
-        abi: contractAbi,
-        functionName: "deposit",
-        args: [amount.toString()],
-      })
-      const { write } = useContractWrite(config)
+	const formattedData =
+		data && data.value
+			? Number(formatEther(data.value.toBigInt())).toLocaleString("en-US", {
+					style: "currency",
+					currency: "USD",
+			  })
+			: "0"
 
-
-  return (
-    <>
-      <button disabled={!write} onClick={() => write?.()}>
-        Send Transaction
-      </button>
-      {error && (
-        <div>An error occurred preparing the transaction: {error.message}</div>
-      )}
-    </>
-  )
+	if (isLoading) return <div>Fetching balance…</div>
+	if (isError) return <div>Error fetching balance</div>
+	return <>{formattedData}</>
 }
 
-export default TVL;
+export default TVL

@@ -19,12 +19,6 @@ interface IProtocol {
     function withdraw(uint256 withdrawAmount) external;
 
     /**
-     * @notice Function for getting the amount supplied to the protocol
-     * @return uint256 Amount supplied to the protocol
-     */
-    function getAmountSupplied() external view returns (uint256);
-
-    /**
      * @notice Function for getting the current TVL from the protocol
      * @return uint256 TVL
      */

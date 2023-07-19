@@ -20,10 +20,10 @@ module.exports = async hre => {
   const usdc = await ethers.getContract("Usdc", deployer)
   const userUsdc = await ethers.getContract("Usdc", user1)
 
-  const totalAmountRaw = 10000000
-  const depositAmountRaw = totalAmountRaw / 2
-  const totalAmount = ethers.parseUnits(String(totalAmountRaw), 6)
-  const depositAmount = ethers.parseUnits(String(depositAmountRaw), 6)
+  const totalAmountRaw = ethers.parseEther("10000000")
+  const depositAmountRaw = totalAmountRaw / 2n
+  const totalAmount = String(totalAmountRaw)
+  const depositAmount = String(depositAmountRaw)
 
   // initialize firewalled protocol
   await firewalledProtocol.initialize()
@@ -38,6 +38,13 @@ module.exports = async hre => {
   const mintDeployerTx = await usdc.mint(deployer, depositAmount)
   await mintDeployerTx.wait()
   log(`Minted 5 million USDC to deployer (${deployer})`)
+
+  const approveNonFirewalledProtocol = await usdc.approve(nonFirewalledProtocolAddress, ethers.MaxUint256)
+  await approveNonFirewalledProtocol.wait()
+  log(`Approved infinite USDC to non-protected protocol (${nonFirewalledProtocolAddress}) from deployer`)
+  const approveFirewalledProtocol = await usdc.approve(firewalledProtocolAddress, ethers.MaxUint256)
+  await approveFirewalledProtocol.wait()
+  log(`Approved infinite USDC to protected (firewalled) protocol (${firewalledProtocolAddress}) from deployer`)
 
   // deposit 5million into the non firewalled protocol
   const firstApproveTx = await userUsdc.approve(nonFirewalledProtocolAddress, depositAmount.toString())
